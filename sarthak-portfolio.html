@@ -1,0 +1,1863 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sarthak Ameriya — Full Stack Developer</title>
+  <meta name="description"
+    content="Sarthak Ameriya — Full Stack Developer specialising in MERN, real-time systems, and AI-integrated applications." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300&family=DM+Mono:wght@300;400&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0e0d0b;
+      --surface: #141310;
+      --border: #2a2620;
+      --amber: #c9933a;
+      --amber-dim: #7a5520;
+      --amber-glow: rgba(201, 147, 58, 0.08);
+      --text: #d4c9b8;
+      --text-dim: #6b6256;
+      --text-faint: #2e2b26;
+      --white: #f0e8d8;
+      --red: #b85c4a;
+      --green: #6a9a6a;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Crimson Pro', serif;
+      font-weight: 300;
+      overflow: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 256px;
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.6;
+    }
+
+    #app {
+      display: grid;
+      grid-template-columns: 230px 1fr;
+      height: 100vh;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 2.5rem;
+      gap: 0;
+    }
+
+    /* ── LEFT ── */
+    #left {
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid var(--border);
+      padding-right: 2rem;
+      padding-top: 0.5rem;
+    }
+
+    .char-header {
+      margin-bottom: 2rem;
+    }
+
+    .char-class {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.58rem;
+      letter-spacing: 0.25rem;
+      color: var(--amber);
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .char-name {
+      font-size: 1.9rem;
+      font-weight: 600;
+      color: var(--white);
+      line-height: 1.05;
+      letter-spacing: -0.01rem;
+      /* Name Highlight Animation */
+      background: linear-gradient(90deg, #d4c9b8, #c9933a, #ffffff, #c9933a, #d4c9b8);
+      background-size: 200% auto;
+      color: transparent;
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: shine 4s linear infinite;
+      text-shadow: 0 0 10px rgba(201, 147, 58, 0.2);
+    }
+
+    @keyframes shine {
+      to {
+        background-position: 200% center;
+      }
+    }
+
+    .char-title {
+      font-style: italic;
+      font-size: 0.95rem;
+      color: var(--text-dim);
+      margin-top: 0.25rem;
+    }
+
+    .level-row {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.8rem;
+    }
+
+    .level-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.15rem;
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+      padding: 0.25rem 0.55rem;
+    }
+
+    .xp-wrap {
+      flex: 1;
+    }
+
+    .xp-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.52rem;
+      color: var(--text-dim);
+      letter-spacing: 0.15rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .xp-track {
+      height: 2px;
+      background: var(--text-faint);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .xp-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+      width: 0%;
+      transition: width 1.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    nav {
+      flex: 1;
+    }
+
+    .nav-hint {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.2rem;
+      color: var(--text-faint);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.55rem 0;
+      cursor: pointer;
+      border-bottom: 1px solid transparent;
+      transition: all 0.2s;
+      position: relative;
+    }
+
+    .nav-item:hover .nav-label {
+      color: var(--text);
+    }
+
+    .nav-cursor {
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--amber);
+      transform: rotate(45deg);
+      flex-shrink: 0;
+      opacity: 0;
+      transition: opacity 0.15s, transform 0.3s;
+    }
+
+    .nav-item.active .nav-cursor {
+      opacity: 1;
+      background: var(--amber);
+    }
+
+    .nav-item.active .nav-label {
+      color: var(--white);
+    }
+
+    .nav-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.2rem;
+      color: var(--text-dim);
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .nav-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      color: var(--text-faint);
+      margin-left: auto;
+    }
+
+    .status-row {
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .status-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .status-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.12rem;
+      color: var(--text-faint);
+    }
+
+    .status-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 5px var(--green);
+      animation: pulse 2.5s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: 0.4;
+      }
+    }
+
+    .status-val {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      color: var(--text-dim);
+    }
+
+    /* ── RIGHT ── */
+    #right {
+      padding-left: 3rem;
+      padding-top: 0.5rem;
+      overflow-y: auto;
+      scrollbar-width: none;
+    }
+
+    #right::-webkit-scrollbar {
+      display: none;
+    }
+
+    .section {
+      display: none;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-label {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.3rem;
+      color: var(--amber);
+      margin-bottom: 0.6rem;
+      opacity: 0.7;
+    }
+
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: var(--white);
+      letter-spacing: -0.02rem;
+      margin-bottom: 0.3rem;
+      line-height: 1;
+    }
+
+    .section-sub {
+      font-style: italic;
+      color: var(--text-dim);
+      font-size: 1rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .divider {
+      width: 40px;
+      height: 1px;
+      background: var(--amber-dim);
+      margin-bottom: 2.5rem;
+      opacity: 0.6;
+    }
+
+    /* ABOUT */
+    .about-bio {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text);
+      max-width: 500px;
+      margin-bottom: 1.2rem;
+    }
+
+    .about-bio em {
+      color: var(--amber);
+      font-style: normal;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem 2rem;
+      margin-top: 2rem;
+    }
+
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      border-bottom: 1px solid var(--text-faint);
+    }
+
+    .stat-key {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.12rem;
+      color: var(--text-dim);
+    }
+
+    .stat-val {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--text);
+    }
+
+    /* SKILLS */
+    .skills-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .skill-item {}
+
+    .skill-head {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.45rem;
+    }
+
+    .skill-name {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.65rem;
+      letter-spacing: 0.12rem;
+      color: var(--text);
+    }
+
+    .skill-pts {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--amber);
+    }
+
+    .skill-bar {
+      height: 2px;
+      background: var(--text-faint);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .skill-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, var(--amber-dim), var(--amber));
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .skill-category {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.25rem;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+      margin-top: 1.8rem;
+    }
+
+    .skill-category:first-of-type {
+      margin-top: 0;
+    }
+
+    /* PROJECTS */
+    .quest-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .quest-item {
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border);
+      cursor: pointer;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.5rem 1.5rem;
+      transition: background 0.2s;
+      position: relative;
+    }
+
+    .quest-item::before {
+      content: '';
+      position: absolute;
+      left: -3rem;
+      top: 0;
+      bottom: 0;
+      width: 0;
+      background: var(--amber-glow);
+      transition: width 0.3s;
+    }
+
+    .quest-item:hover::before {
+      width: calc(100% + 6rem);
+    }
+
+    .quest-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.25rem;
+      line-height: 1.2;
+    }
+
+    .quest-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.5;
+      font-style: italic;
+    }
+
+    .quest-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+      margin-top: 0.6rem;
+    }
+
+    .quest-tag {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.1rem;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.45rem;
+    }
+
+    .quest-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.12rem;
+      color: var(--green);
+      border: 1px solid currentColor;
+      padding: 0.2rem 0.5rem;
+      height: fit-content;
+      align-self: start;
+      margin-top: 0.3rem;
+      opacity: 0.8;
+    }
+
+    .quest-item>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .quest-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.55rem;
+    }
+
+    .quest-gh {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.12rem;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.55rem;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+
+    .quest-gh:hover {
+      color: var(--amber);
+      border-color: var(--amber-dim);
+    }
+
+    .quest-gh svg {
+      width: 10px;
+      height: 10px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* EXPERIENCE / EDUCATION */
+    .timeline {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 6px;
+      bottom: 6px;
+      width: 1px;
+      background: var(--border);
+    }
+
+    .timeline-item {
+      position: relative;
+      padding-bottom: 2rem;
+    }
+
+    .timeline-item:last-child {
+      padding-bottom: 0;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: -1.57rem;
+      top: 6px;
+      width: 6px;
+      height: 6px;
+      border: 1px solid var(--amber);
+      transform: rotate(45deg);
+      background: var(--bg);
+    }
+
+    .timeline-item.current .timeline-dot {
+      background: var(--amber);
+    }
+
+    .timeline-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15rem;
+      color: var(--text-dim);
+      margin-bottom: 0.4rem;
+    }
+
+    .timeline-role {
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--white);
+      margin-bottom: 0.15rem;
+    }
+
+    .timeline-company {
+      font-style: italic;
+      color: var(--amber);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      opacity: 0.8;
+    }
+
+    .timeline-desc {
+      font-size: 0.9rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+    }
+
+    .timeline-bullets {
+      margin-top: 0.4rem;
+      padding-left: 1rem;
+    }
+
+    .timeline-bullets li {
+      font-size: 0.88rem;
+      color: var(--text-dim);
+      line-height: 1.65;
+      margin-bottom: 0.2rem;
+      list-style: none;
+      position: relative;
+    }
+
+    .timeline-bullets li::before {
+      content: '·';
+      position: absolute;
+      left: -0.8rem;
+      color: var(--amber);
+    }
+
+    /* CONTACT */
+    .contact-intro {
+      font-size: 1.05rem;
+      line-height: 1.75;
+      color: var(--text);
+      max-width: 420px;
+      margin-bottom: 2.5rem;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .contact-link {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border);
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .contact-link::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      height: 1px;
+      width: 0;
+      background: var(--amber);
+      transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .contact-link:hover::after {
+      width: 100%;
+    }
+
+    .contact-link:hover .contact-link-label {
+      color: var(--white);
+    }
+
+    .contact-link:hover .contact-link-arrow {
+      transform: translateX(4px);
+      opacity: 1;
+    }
+
+    .contact-link-icon {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.15rem;
+      color: var(--amber);
+      width: 70px;
+      flex-shrink: 0;
+    }
+
+    .contact-link-label {
+      font-size: 1rem;
+      color: var(--text-dim);
+      transition: color 0.2s;
+    }
+
+    .contact-link-arrow {
+      margin-left: auto;
+      font-size: 0.8rem;
+      color: var(--amber);
+      opacity: 0.3;
+      transition: transform 0.2s, opacity 0.2s;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* certs section */
+    .cert-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .cert-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .cert-name {
+      font-size: 1rem;
+      color: var(--text);
+    }
+
+    .cert-date {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.12rem;
+      color: var(--text-dim);
+    }
+
+    .kbd-hint {
+      position: fixed;
+      bottom: 1.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.2rem;
+      color: var(--text-faint);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .kbd {
+      border: 1px solid var(--text-faint);
+      padding: 0.1rem 0.35rem;
+      border-radius: 2px;
+      font-size: 0.5rem;
+    }
+
+    /* ── PLAY BUTTON ── */
+    .play-btn {
+      margin-top: 1.2rem;
+      width: 100%;
+      background: none;
+      border: 1px solid var(--border);
+      color: var(--text-faint);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.52rem;
+      letter-spacing: 0.2rem;
+      padding: 0.5rem 0.75rem;
+      cursor: pointer;
+      text-align: left;
+      transition: border-color 0.2s, color 0.2s;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .play-btn:hover {
+      border-color: var(--amber-dim);
+      color: var(--amber);
+    }
+
+    .play-btn-dot {
+      width: 5px;
+      height: 5px;
+      border: 1px solid currentColor;
+      transform: rotate(45deg);
+      flex-shrink: 0;
+    }
+
+    /* ── MODALS ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(14, 13, 11, 0.85);
+      z-index: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      backdrop-filter: blur(3px);
+      animation: fadeIn 0.2s ease;
+    }
+
+    .modal-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .modal-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2rem;
+      color: var(--amber);
+      text-transform: uppercase;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--text-dim);
+      font-size: 0.75rem;
+      font-family: 'DM Mono', monospace;
+      padding: 0.1rem 0.3rem;
+      transition: color 0.15s;
+    }
+
+    .modal-close:hover {
+      color: var(--white);
+    }
+
+    /* ── AUTO TOUR ── */
+    #tour-bar-wrap {
+      height: 2px;
+      background: transparent;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      margin-bottom: 0;
+    }
+
+    #tour-progress {
+      height: 100%;
+      background: var(--amber);
+      width: 0%;
+      box-shadow: 0 0 6px var(--amber);
+    }
+
+    #tour-hud {
+      position: fixed;
+      bottom: 3.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      display: none;
+      align-items: center;
+      gap: 1.2rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.18rem;
+      color: var(--amber);
+      background: var(--surface);
+      border: 1px solid var(--amber-dim);
+      padding: 0.45rem 1rem;
+      z-index: 200;
+      white-space: nowrap;
+    }
+
+    #tour-hud.active {
+      display: flex;
+    }
+
+    .tour-hud-stop {
+      background: none;
+      border: 1px solid var(--amber-dim);
+      color: var(--text-dim);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.48rem;
+      letter-spacing: 0.15rem;
+      padding: 0.15rem 0.45rem;
+      cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .tour-hud-stop:hover {
+      color: var(--white);
+      border-color: var(--border);
+    }
+
+    /* chapter flash overlay */
+    #chapter-flash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: none;
+      z-index: 150;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    #chapter-flash.show {
+      opacity: 1;
+    }
+
+    .chapter-card {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.4rem;
+      color: var(--amber);
+      border: 1px solid var(--amber-dim);
+      padding: 0.6rem 1.6rem;
+      background: var(--surface);
+      text-transform: uppercase;
+      text-align: center;
+    }
+
+    .chapter-card-num {
+      font-size: 0.42rem;
+      color: var(--text-faint);
+      margin-bottom: 0.25rem;
+      letter-spacing: 0.3rem;
+    }
+
+    .play-btn.touring {
+      border-color: var(--amber-dim);
+      color: var(--amber);
+    }
+
+    /* ── RESUME MODAL ── */
+    .resume-dl-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.5rem;
+      letter-spacing: 0.12rem;
+      color: var(--text-dim);
+      border: 1px solid var(--border);
+      padding: 0.25rem 0.6rem;
+      text-decoration: none;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .resume-dl-btn:hover {
+      color: var(--amber);
+      border-color: var(--amber-dim);
+    }
+
+    .resume-iframe-wrap {
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+    }
+
+    .resume-iframe-wrap iframe {
+      display: block;
+      border: none;
+    }
+
+    /* ── LIGHTBOX GALLERY ── */
+    .quest-gallery {
+      display: flex;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .quest-thumb {
+      width: 4.5rem;
+      height: 3rem;
+      border: 1px solid var(--border);
+      border-radius: 2px;
+      cursor: pointer;
+      overflow: hidden;
+      opacity: 0.7;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+
+    .quest-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      pointer-events: none;
+    }
+
+    .quest-thumb:hover {
+      opacity: 1;
+      border-color: var(--amber-dim);
+    }
+
+    .lightbox-img-wrap {
+      width: 90vw;
+      height: 80vh;
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .lightbox-img-wrap img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border);
+    }
+
+    .lightbox-nav {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(14, 13, 11, 0.8);
+      border: 1px solid var(--border);
+      color: var(--amber);
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: border-color 0.2s;
+      font-family: 'DM Mono', monospace;
+      z-index: 10;
+    }
+
+    .lightbox-nav:hover {
+      border-color: var(--amber-dim);
+      color: var(--white);
+    }
+
+    .lightbox-prev {
+      left: -3.5rem;
+    }
+
+    .lightbox-next {
+      right: -3.5rem;
+    }
+
+    .lightbox-counter {
+      position: absolute;
+      bottom: -2.5rem;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'DM Mono', monospace;
+      font-size: 0.55rem;
+      letter-spacing: 0.2rem;
+      color: var(--text-faint);
+    }
+
+    .resume-iframe-wrap {
+      background: #1a1a1a;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 480px;
+    }
+
+    .resume-iframe-wrap iframe {
+      display: block;
+      border: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="app">
+
+    <!-- LEFT -->
+    <aside id="left">
+      <div class="char-header">
+        <div class="char-class">Full Stack Developer</div>
+        <div class="char-name">Sarthak<br>Ameriya</div>
+        <div class="char-title">MERN · React · Node.js</div>
+      </div>
+
+      <div class="level-row">
+        <div class="level-badge">LVL 3</div>
+        <div class="xp-wrap">
+          <div class="xp-label">XP · 2800 / 5000</div>
+          <div class="xp-track">
+            <div class="xp-fill" id="xp-fill"></div>
+          </div>
+        </div>
+      </div>
+
+      <nav>
+        <div class="nav-hint">Navigate</div>
+        <div class="nav-item active" data-section="about">
+          <div class="nav-cursor"></div>
+          <span class="nav-label">About</span>
+          <span class="nav-num">01</span>
+        </div>
+        <div class="nav-item" data-section="skills">
+          <div class="nav-cursor"></div>
+          <span class="nav-label">Skills</span>
+          <span class="nav-num">02</span>
+        </div>
+        <div class="nav-item" data-section="projects">
+          <div class="nav-cursor"></div>
+          <span class="nav-label">Projects</span>
+          <span class="nav-num">03</span>
+        </div>
+        <div class="nav-item" data-section="experience">
+          <div class="nav-cursor"></div>
+          <span class="nav-label">Experience</span>
+          <span class="nav-num">04</span>
+        </div>
+        <div class="nav-item" data-section="contact">
+          <div class="nav-cursor"></div>
+          <span class="nav-label">Contact</span>
+          <span class="nav-num">05</span>
+        </div>
+      </nav>
+
+      <div class="status-row">
+        <div class="status-item">
+          <span class="status-label">STATUS</span>
+          <div style="display:flex;align-items:center;gap:0.5rem;">
+            <div class="status-dot"></div>
+            <span class="status-val">Open to work</span>
+          </div>
+        </div>
+        <div class="status-item">
+          <span class="status-label">LOCATION</span>
+          <span class="status-val">Punjab, India</span>
+        </div>
+      </div>
+
+      <!-- TOUR BUTTON -->
+      <button class="play-btn" id="play-btn">
+        <span class="play-btn-dot"></span>
+        Auto Tour &nbsp;[T]
+      </button>
+
+    </aside>
+
+    <!-- RIGHT -->
+    <main id="right">
+
+      <!-- ABOUT -->
+      <div class="section active" id="section-about">
+        <div class="section-label">01 · Character Info</div>
+        <div class="section-title">About</div>
+        <div class="section-sub">Who I am</div>
+        <div class="divider"></div>
+        <p class="about-bio">
+          Full Stack Developer specialising in the <em>MERN stack</em>, real-time systems, and
+          AI-integrated applications. I architect and ship production-grade software —
+          from <em>facial recognition pipelines</em> achieving &gt;98% accuracy to
+          multi-tenant collaborative IDEs with live multi-cursor sync.
+        </p>
+        <p class="about-bio">
+          I approach every problem with a <em>systems-thinking mindset</em>: clean API contracts,
+          efficient data models, and UX that gets out of the way. Currently pursuing B.Tech CSE
+          at LPU while building tools that reach real users.
+        </p>
+        <div class="stats-grid">
+          <div class="stat-row"><span class="stat-key">STACK</span><span class="stat-val">MERN · Socket.IO</span></div>
+          <div class="stat-row"><span class="stat-key">UNIVERSITY</span><span class="stat-val">LPU, Punjab</span></div>
+          <div class="stat-row"><span class="stat-key">DEGREE</span><span class="stat-val">B.Tech CSE</span></div>
+          <div class="stat-row"><span class="stat-key">FOCUS</span><span class="stat-val">Systems &amp; AI</span></div>
+          <div class="stat-row"><span class="stat-key">PROJECTS</span><span class="stat-val">3 shipped</span></div>
+          <div class="stat-row"><span class="stat-key">AVAILABILITY</span><span class="stat-val">Immediate</span></div>
+        </div>
+      </div>
+
+      <!-- SKILLS -->
+      <div class="section" id="section-skills">
+        <div class="section-label">02 · Attribute Sheet</div>
+        <div class="section-title">Skills</div>
+        <div class="section-sub">Proficiency stats</div>
+        <div class="divider"></div>
+        <div class="skills-list" id="skills-list">
+
+          <div class="skill-category">Languages</div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">JavaScript</span><span class="skill-pts">85 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="85"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Python</span><span class="skill-pts">80 / 100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="80"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Java</span><span class="skill-pts">70 / 100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="70"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">PHP</span><span class="skill-pts">65 / 100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="65"></div>
+            </div>
+          </div>
+
+          <div class="skill-category">Frontend</div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">React.js</span><span class="skill-pts">82 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="82"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">HTML / CSS</span><span class="skill-pts">88 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="88"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Tailwind CSS</span><span class="skill-pts">80 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="80"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Bootstrap</span><span class="skill-pts">72 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="72"></div>
+            </div>
+          </div>
+
+          <div class="skill-category">Backend & Data</div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Node.js / Express.js</span><span class="skill-pts">80 /
+                100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="80"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">MongoDB / Atlas</span><span class="skill-pts">78 /
+                100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="78"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">MySQL</span><span class="skill-pts">68 / 100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="68"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Socket.IO</span><span class="skill-pts">72 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="72"></div>
+            </div>
+          </div>
+
+          <div class="skill-category">Tools &amp; DevOps</div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Git / GitHub</span><span class="skill-pts">88 / 100</span>
+            </div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="88"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">REST API Design</span><span class="skill-pts">84 /
+                100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="84"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">JWT / Auth Systems</span><span class="skill-pts">80 /
+                100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="80"></div>
+            </div>
+          </div>
+          <div class="skill-item">
+            <div class="skill-head"><span class="skill-name">Cloudinary / S3</span><span class="skill-pts">72 /
+                100</span></div>
+            <div class="skill-bar">
+              <div class="skill-bar-fill" data-w="72"></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- PROJECTS -->
+      <div class="section" id="section-projects">
+        <div class="section-label">03 · Quest Log</div>
+        <div class="section-title">Projects</div>
+        <div class="section-sub">Completed quests</div>
+        <div class="divider"></div>
+        <div class="quest-list">
+
+          <!-- Project 1: Facial Attendance -->
+          <div class="quest-item">
+            <div>
+              <div class="quest-name">Facial Attendance System</div>
+              <div class="quest-desc">Production-grade biometric attendance pipeline built on a <em
+                  style="color:var(--amber);font-style:normal;">CNN + FaceNet</em> backbone. Processes 1.5s video
+                streams into 512-dimensional embeddings with &gt;98% matching accuracy. Features sub-second auth, full
+                liveness detection eliminating 100% of spoofing vectors, and a React + Node.js admin dashboard for
+                session management.</div>
+              <div class="quest-tags">
+                <span class="quest-tag">Python</span><span class="quest-tag">FaceNet</span>
+                <span class="quest-tag">ONNX</span><span class="quest-tag">OpenCV</span>
+                <span class="quest-tag">MongoDB Atlas</span><span class="quest-tag">React.js</span>
+                <span class="quest-tag">Node.js</span>
+              </div>
+              <div class="quest-gallery">
+                <div class="quest-thumb" onclick="openLightbox(0)"><img src="attendance-1.png" alt="Smart Campus Login">
+                </div>
+                <div class="quest-thumb" onclick="openLightbox(1)"><img src="attendance-2.png" alt="Admin Dashboard">
+                </div>
+                <div class="quest-thumb" onclick="openLightbox(2)"><img src="attendance-3.png"
+                    alt="Registration Portal"></div>
+                <div class="quest-thumb" onclick="openLightbox(3)"><img src="attendance-4.png" alt="Attendance Reports">
+                </div>
+                <div class="quest-thumb" onclick="openLightbox(4)"><img src="attendance-5.png" alt="Face Scanner"></div>
+              </div>
+            </div>
+            <div class="quest-right">
+              <div class="quest-badge">COMPLETE</div>
+              <a class="quest-gh" href="https://github.com/Sarthak478/FACIAL_ATTENDANCE_MARKING_SYSTEM" target="_blank"
+                rel="noopener">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                VIEW CODE
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 2: MiniGram -->
+          <div class="quest-item">
+            <div>
+              <div class="quest-name">MiniGram</div>
+              <div class="quest-desc">Full-stack social platform engineered with a <em
+                  style="color:var(--amber);font-style:normal;">scalable MVC architecture</em>. Implements JWT
+                authentication, paginated feeds, multi-image carousel uploads via Cloudinary, and real-time comment
+                threads over Socket.IO — all served from a single Express + MongoDB backend with EJS templating.</div>
+              <div class="quest-tags">
+                <span class="quest-tag">Node.js</span><span class="quest-tag">Express.js</span>
+                <span class="quest-tag">MongoDB</span><span class="quest-tag">Socket.IO</span>
+                <span class="quest-tag">Cloudinary</span><span class="quest-tag">EJS</span>
+                <span class="quest-tag">Tailwind CSS</span><span class="quest-tag">JWT</span>
+              </div>
+              <div class="quest-gallery">
+                <div class="quest-thumb" onclick="openLightbox(5)"><img src="minigram-1.png" alt="MiniGram Feed"></div>
+                <div class="quest-thumb" onclick="openLightbox(6)"><img src="minigram-2.png" alt="Create Post"></div>
+                <div class="quest-thumb" onclick="openLightbox(7)"><img src="minigram-3.png" alt="User Login"></div>
+              </div>
+            </div>
+            <div class="quest-right">
+              <div class="quest-badge">COMPLETE</div>
+              <a class="quest-gh" href="https://github.com/Sarthak478/MiniGram" target="_blank" rel="noopener">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                VIEW CODE
+              </a>
+            </div>
+          </div>
+
+          <!-- Project 3: CodeTogether -->
+          <div class="quest-item">
+            <div>
+              <div class="quest-name">CodeTogether — Collaborative IDE</div>
+              <div class="quest-desc">Real-time multiplayer coding environment with <em
+                  style="color:var(--amber);font-style:normal;">live multi-cursor CRDT sync</em>, in-editor chat, and
+                sandboxed code execution — architected to surpass VS Code LiveShare in permission granularity. Three
+                access modes: <em style="color:var(--amber);font-style:normal;">Interview</em> (controlled), <em
+                  style="color:var(--amber);font-style:normal;">Teacher</em> (guided), and <em
+                  style="color:var(--amber);font-style:normal;">Friends</em> (open collab). Currently in active
+                development.</div>
+              <div class="quest-tags">
+                <span class="quest-tag">React</span><span class="quest-tag">Node.js</span>
+                <span class="quest-tag">Yjs / CRDT</span><span class="quest-tag">Socket.IO</span>
+                <span class="quest-tag">MongoDB</span><span class="quest-tag">Real-time</span>
+              </div>
+            </div>
+            <div class="quest-right">
+              <div class="quest-badge" style="color:var(--amber);border-color:currentColor;">IN PROGRESS</div>
+              <a class="quest-gh" href="https://github.com/Sarthak478/CodeTogether" target="_blank" rel="noopener">
+                <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                </svg>
+                VIEW CODE
+              </a>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- EXPERIENCE + EDUCATION -->
+      <div class="section" id="section-experience">
+        <div class="section-label">04 · Chronicles</div>
+        <div class="section-title">Experience</div>
+        <div class="section-sub">Internships & education</div>
+        <div class="divider"></div>
+
+        <div class="section-label" style="margin-bottom:1rem;">Internship</div>
+        <div class="timeline" style="margin-bottom:2.5rem;">
+          <div class="timeline-item current">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">JUN 2025 — SEPT 2025</div>
+            <div class="timeline-role">Backend Developer Intern</div>
+            <div class="timeline-company">GBJ Buzz Private Limited</div>
+            <ul class="timeline-bullets">
+              <li>Optimised GBJ Portal backend (PHP), improving data handling and cutting API response time by 30%.</li>
+              <li>Redesigned database workflows and onboarding logic, boosting platform efficiency and adoption.</li>
+              <li>Implemented secure authentication and data-driven features, enhancing access control and engagement.
+              </li>
+            </ul>
+            <div class="quest-tags" style="margin-top:0.75rem;">
+              <span class="quest-tag">PHP</span><span class="quest-tag">MySQL</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-label" style="margin-bottom:1rem;">Education</div>
+        <div class="timeline">
+
+          <div class="timeline-item current">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">AUG 2023 — PRESENT</div>
+            <div class="timeline-role">B.Tech — Computer Science & Engineering</div>
+            <div class="timeline-company">Lovely Professional University, Punjab</div>
+            <div class="timeline-desc">CGPA: 7.0 &nbsp;·&nbsp; Specialising in full-stack web development, AI/ML, and
+              distributed systems.</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">APR 2021 — MAR 2023</div>
+            <div class="timeline-role">Intermediate (Class XII)</div>
+            <div class="timeline-company">Step by Step Sr. Sec. School, New Delhi</div>
+            <div class="timeline-desc">Percentage: 69%</div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-date">APR 2020 — MAR 2021</div>
+            <div class="timeline-role">Matriculation (Class X)</div>
+            <div class="timeline-company">Step by Step Sr. Sec. School, New Delhi</div>
+            <div class="timeline-desc">Percentage: 82%</div>
+          </div>
+
+        </div>
+
+        <!-- Certs -->
+        <div style="margin-top:2.5rem;">
+          <div class="section-label" style="margin-bottom:1rem;">Certificates & Achievements</div>
+          <div class="cert-list">
+            <div class="cert-item">
+              <span class="cert-name"><a href="javascript_intermediate certificate.pdf" target="_blank">JavaScript Intermediate</a></span>
+              <span class="cert-date">MAR 2026</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-name"><a href="nodejs_intermediate certificate.pdf" target="_blank">Node.js Intermediate</a></span>
+              <span class="cert-date">FEB 2026</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-name"><a href="react_basic certificate.pdf" target="_blank">React Basic</a></span>
+              <span class="cert-date">JAN 2026</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-name">Social Networks</span>
+              <span class="cert-date">NOV 2025</span>
+            </div>
+            <div class="cert-item">
+              <span class="cert-name">Led 15+ students in Python training</span>
+              <span class="cert-date">LEADERSHIP</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- CONTACT -->
+      <div class="section" id="section-contact">
+        <div class="section-label">05 · Send a Raven</div>
+        <div class="section-title">Contact</div>
+        <div class="section-sub">Let's build something</div>
+        <div class="divider"></div>
+        <p class="contact-intro">
+          Open to full-time roles, contract work, and high-impact collaborations.
+          I move fast, write clean code, and ship things that work. Usually respond within 24 hours.
+        </p>
+        <div class="contact-links">
+          <a class="contact-link" href="mailto:sarthakameriya478@gmail.com">
+            <span class="contact-link-icon">EMAIL</span>
+            <span class="contact-link-label">sarthakameriya478@gmail.com</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="https://github.com/Sarthak478" target="_blank">
+            <span class="contact-link-icon">GITHUB</span>
+            <span class="contact-link-label">github.com/Sarthak478</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="https://www.linkedin.com/in/sarthak-ameriya" target="_blank">
+            <span class="contact-link-icon">LINKEDIN</span>
+            <span class="contact-link-label">linkedin.com/in/sarthak-ameriya</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <a class="contact-link" href="tel:+917976107008">
+            <span class="contact-link-icon">MOBILE</span>
+            <span class="contact-link-label">+91 79761 07008</span>
+            <span class="contact-link-arrow">→</span>
+          </a>
+          <div class="contact-link" id="resume-open-btn" style="cursor:pointer;">
+            <span class="contact-link-icon">RESUME</span>
+            <span class="contact-link-label">Preview &amp; Download</span>
+            <span class="contact-link-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- CHAPTER FLASH OVERLAY -->
+  <div id="chapter-flash">
+    <div class="chapter-card">
+      <div class="chapter-card-num" id="chapter-num"></div>
+      <div id="chapter-name"></div>
+    </div>
+  </div>
+
+  <!-- TOUR HUD -->
+  <div id="tour-hud">
+    <span id="tour-hud-label">TOURING</span>
+    <button class="tour-hud-stop" id="tour-stop">■ STOP</button>
+    <button class="tour-hud-stop" id="tour-skip" style="margin-left: -0.5rem;">✕ SKIP</button>
+  </div>
+
+  <!-- TOUR PROGRESS BAR (inside #right, added via JS) -->
+
+  <!-- RESUME MODAL -->
+  <div id="resume-modal" class="modal-overlay" style="display:none;">
+    <div class="modal-box" style="width:min(720px,92vw);">
+      <div class="modal-header">
+        <span class="modal-title">◆ Resume · Sarthak Ameriya</span>
+        <div style="display:flex;align-items:center;gap:0.75rem;">
+          <a class="resume-dl-btn" href="../Desktop/Latest_Sarthak_CV.pdf" download="Sarthak_Ameriya_Resume.pdf">
+            ↓ Download PDF
+          </a>
+          <button class="modal-close" id="resume-close">✕</button>
+        </div>
+      </div>
+      <div class="resume-iframe-wrap">
+        <iframe id="resume-iframe" src="../Desktop/Latest_Sarthak_CV.pdf" width="100%" height="500"
+          title="Sarthak Ameriya Resume"></iframe>
+      </div>
+      <div
+        style="padding:0.6rem 1rem;border-top:1px solid var(--border);font-family:'DM Mono',monospace;font-size:0.48rem;letter-spacing:0.12rem;color:var(--text-faint);">
+        Can't see the preview?
+        <a href="../Desktop/Latest_Sarthak_CV.pdf" target="_blank" style="color:var(--amber);text-decoration:none;">Open
+          in
+          new tab →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightbox-modal" class="modal-overlay"
+    style="display:none; flex-direction:column; background:rgba(10,9,8,0.95); z-index:1000;">
+    <button class="modal-close" id="lightbox-close"
+      style="position:absolute; top:1.5rem; right:2rem; font-size:1rem;">✕</button>
+    <div class="lightbox-img-wrap">
+      <div class="lightbox-nav lightbox-prev" onclick="navLightbox(-1)">←</div>
+      <img id="lightbox-img" src="" alt="Project Screenshot">
+      <div class="lightbox-nav lightbox-next" onclick="navLightbox(1)">→</div>
+      <div class="lightbox-counter" id="lightbox-count">1 / 5</div>
+    </div>
+  </div>
+
+  <div class="kbd-hint">
+    <span class="kbd">↑</span><span class="kbd">↓</span>
+    <span>navigate &nbsp;·&nbsp;</span>
+    <span class="kbd">1</span>–<span class="kbd">5</span>
+    <span>jump to section</span>
+  </div>
+
+  <script>
+    /* ── NAV ── */
+    const navItems = [...document.querySelectorAll('.nav-item')];
+    const sections = [...document.querySelectorAll('.section')];
+    let current = 0;
+
+    function goTo(idx, fromTour = false) {
+      if (idx < 0 || idx >= navItems.length) return;
+      navItems[current].classList.remove('active');
+      sections[current].classList.remove('active');
+      current = idx;
+      navItems[current].classList.add('active');
+      sections[current].classList.add('active');
+      // scroll right panel to top on section change
+      document.getElementById('right').scrollTop = 0;
+      if (navItems[current].dataset.section === 'skills') {
+        setTimeout(() => {
+          document.querySelectorAll('.skill-bar-fill').forEach(el => {
+            el.style.width = el.dataset.w + '%';
+          });
+        }, 80);
+      }
+      if (tourActive && !fromTour) stopTour(); // user manually navigated
+    }
+
+    navItems.forEach((item, i) => item.addEventListener('click', () => goTo(i)));
+
+    /* ── AUTO TOUR ── */
+    const TOUR_DURATION = 6000; // ms per section
+    let tourActive = false;
+    let tourTimer = null;
+    let tourFlashTimer = null;
+
+    // Inject a tour progress bar at the very top of #right
+    const tourBarWrap = document.createElement('div');
+    tourBarWrap.id = 'tour-bar-wrap';
+    const tourBar = document.createElement('div');
+    tourBar.id = 'tour-progress';
+    tourBarWrap.appendChild(tourBar);
+    document.getElementById('right').prepend(tourBarWrap);
+
+    const SECTION_LABELS = ['About', 'Skills', 'Projects', 'Experience', 'Contact'];
+
+    function flashChapter(idx) {
+      const flash = document.getElementById('chapter-flash');
+      document.getElementById('chapter-num').textContent =
+        String(idx + 1).padStart(2, '0') + ' · ' + String(navItems.length).padStart(2, '0');
+      document.getElementById('chapter-name').textContent = SECTION_LABELS[idx] || navItems[idx].dataset.section;
+      flash.classList.add('show');
+      clearTimeout(tourFlashTimer);
+      tourFlashTimer = setTimeout(() => flash.classList.remove('show'), 1400);
+    }
+
+    function setTourProgress(pct, animated) {
+      tourBar.style.transition = animated ? `width ${TOUR_DURATION}ms linear` : 'none';
+      tourBar.style.width = pct + '%';
+    }
+
+    let tourGalleryTimer = null;
+
+    function advanceTour() {
+      clearTimeout(tourTimer);
+      clearTimeout(tourGalleryTimer);
+      if (!tourActive) return;
+
+      // If we are currently on the Projects section, tour through the lightbox
+      if (navItems[current].dataset.section === 'projects') {
+        if (document.getElementById('lightbox-modal').style.display === 'none') {
+          // Start looping images
+          openLightbox(0, true);
+          setTourProgress(0, false);
+          requestAnimationFrame(() => requestAnimationFrame(() => {
+            setTourProgress(100, true);
+            tourGalleryTimer = setTimeout(advanceTour, TOUR_DURATION / 2); // Show images faster
+          }));
+          return;
+        } else {
+          // We are currently showing an image
+          if (lbIndex < galleryImages.length - 1) {
+            navLightbox(1);
+            setTourProgress(0, false);
+            requestAnimationFrame(() => requestAnimationFrame(() => {
+              setTourProgress(100, true);
+              tourGalleryTimer = setTimeout(advanceTour, TOUR_DURATION / 2);
+            }));
+            return;
+          } else {
+            // Finished showing all images
+            document.getElementById('lightbox-modal').style.display = 'none';
+          }
+        }
+      }
+
+      if (current < navItems.length - 1) {
+        const next = current + 1;
+        goTo(next, true);
+        flashChapter(next);
+        updateHUD();
+        // reset bar, then animate
+        setTourProgress(0, false);
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          setTourProgress(100, true);
+          tourTimer = setTimeout(advanceTour, TOUR_DURATION);
+        }));
+      } else {
+        // reached last section
+        setTourProgress(100, false);
+        stopTour(true);
+      }
+    }
+
+    function startTour() {
+      tourActive = true;
+      document.getElementById('play-btn').classList.add('touring');
+      document.getElementById('tour-hud').classList.add('active');
+      goTo(0, true);
+      flashChapter(0);
+      updateHUD();
+      setTourProgress(0, false);
+      requestAnimationFrame(() => requestAnimationFrame(() => {
+        setTourProgress(100, true);
+        tourTimer = setTimeout(advanceTour, TOUR_DURATION);
+      }));
+    }
+
+    function stopTour(completed = false) {
+      tourActive = false;
+      clearTimeout(tourTimer);
+      clearTimeout(tourGalleryTimer);
+      clearTimeout(tourFlashTimer);
+      document.getElementById('chapter-flash').classList.remove('show');
+      document.getElementById('play-btn').classList.remove('touring');
+      document.getElementById('tour-hud').classList.remove('active');
+
+      // If we were in the middle of gallery tour, close lightbox
+      if (!completed && document.getElementById('lightbox-modal').style.display !== 'none') {
+        document.getElementById('lightbox-modal').style.display = 'none';
+      }
+
+      setTourProgress(0, false);
+      if (completed) {
+        // brief "tour complete" flash
+        document.getElementById('chapter-num').textContent = 'TOUR COMPLETE';
+        document.getElementById('chapter-name').textContent = '';
+        document.getElementById('chapter-flash').classList.add('show');
+        setTimeout(() => document.getElementById('chapter-flash').classList.remove('show'), 2000);
+      }
+    }
+
+    function updateHUD() {
+      document.getElementById('tour-hud-label').textContent =
+        String(current + 1).padStart(2, '0') + ' / ' + navItems.length + ' · ' +
+        (SECTION_LABELS[current] || navItems[current].dataset.section).toUpperCase();
+    }
+
+    document.getElementById('play-btn').addEventListener('click', () => {
+      if (tourActive) stopTour(); else startTour();
+    });
+    document.getElementById('tour-stop').addEventListener('click', stopTour);
+    document.getElementById('tour-skip').addEventListener('click', () => stopTour(true));
+
+    /* ── RESUME MODAL ── */
+    function openModal(id) { document.getElementById(id).style.display = 'flex'; if (tourActive) stopTour(); }
+    function closeModal(id) { document.getElementById(id).style.display = 'none'; }
+
+    document.getElementById('resume-open-btn').addEventListener('click', () => openModal('resume-modal'));
+    document.getElementById('resume-close').addEventListener('click', () => closeModal('resume-modal'));
+    document.getElementById('resume-modal').addEventListener('click', e => {
+      if (e.target === e.currentTarget) closeModal('resume-modal');
+    });
+
+    /* ── LIGHTBOX ── */
+    const galleryImages = [
+      "attendance-1.png",
+      "attendance-2.png",
+      "attendance-3.png",
+      "attendance-4.png",
+      "attendance-5.png",
+      "minigram-1.png",
+      "minigram-2.png",
+      "minigram-3.png"
+    ];
+    let lbIndex = 0;
+
+    function openLightbox(idx, fromTour = false) {
+      lbIndex = idx;
+      updateLightbox();
+      document.getElementById('lightbox-modal').style.display = 'flex';
+      if (tourActive && !fromTour) stopTour();
+    }
+
+    function updateLightbox() {
+      document.getElementById('lightbox-img').src = galleryImages[lbIndex];
+      document.getElementById('lightbox-count').textContent = `${lbIndex + 1} / ${galleryImages.length}`;
+    }
+
+    function navLightbox(dir) {
+      lbIndex = (lbIndex + dir + galleryImages.length) % galleryImages.length;
+      updateLightbox();
+    }
+
+    document.getElementById('lightbox-close').addEventListener('click', () => {
+      document.getElementById('lightbox-modal').style.display = 'none';
+    });
+    document.getElementById('lightbox-modal').addEventListener('click', e => {
+      if (e.target.id === 'lightbox-modal' || e.target.classList.contains('lightbox-img-wrap')) {
+        document.getElementById('lightbox-modal').style.display = 'none';
+      }
+    });
+
+    /* ── KEYDOWN ── */
+    document.addEventListener('keydown', e => {
+      const resumeOpen = document.getElementById('resume-modal').style.display !== 'none';
+      const lbOpen = document.getElementById('lightbox-modal').style.display !== 'none';
+
+      if (e.key === 'Escape') {
+        if (resumeOpen) { closeModal('resume-modal'); return; }
+        if (lbOpen) { document.getElementById('lightbox-modal').style.display = 'none'; return; }
+        if (tourActive) { stopTour(); return; }
+      }
+      if (lbOpen) {
+        if (e.key === 'ArrowLeft') { navLightbox(-1); }
+        if (e.key === 'ArrowRight') { navLightbox(1); }
+        return;
+      }
+      if ((e.key === 't' || e.key === 'T') && !resumeOpen) {
+        if (tourActive) stopTour(); else startTour();
+        return;
+      }
+      if (resumeOpen) return;
+      if (e.key === 'ArrowDown' || e.key === 'ArrowRight') { e.preventDefault(); goTo(current + 1); }
+      if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') { e.preventDefault(); goTo(current - 1); }
+      const n = parseInt(e.key);
+      if (n >= 1 && n <= navItems.length) goTo(n - 1);
+    });
+
+    /* ── XP BAR ON LOAD ── */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const xp = document.getElementById('xp-fill');
+        if (xp) xp.style.width = '56%';
+      }, 300);
+    });
+  </script>
+</body>
+
+</html>
